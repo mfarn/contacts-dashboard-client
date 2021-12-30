@@ -1,12 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Button from '@material-ui/core/Button';
+import Link from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
+import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
+import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
 
-import api from './services/api'
+import { useParams } from 'react-router-dom'
+
+import api from '../services/api'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -46,13 +51,27 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function SignUp() {
+export default function Update() {
   const classes = useStyles();
+  const { id } = useParams();
 
   const [email, setEmail] = useState('');
   const [dob, setDob] = useState('');
   const [phone, setPhone] = useState('');
   const [weight, setWeight] = useState('');
+
+  useEffect(() => {
+    async function getContacts() {
+        const response = await api.get('/contacts/' + id)
+        setEmail(response.data.email);
+        setDob(response.data.imageUrl)
+        setPhone(response.data.phone)
+        setWeight(response.data.weight)
+    }
+
+
+    getContacts();
+}, [])
 
   async function handleSubmit() {
 
@@ -63,20 +82,32 @@ export default function SignUp() {
       weight: weight
     }
 
-    const response = await api.post('/contacts', data);
-
+    if(email !== '' && phone !== '' && dob !== '' && weight !== '') {
+      await api.put('/contacts/'+id , data);
+    } else {
+      alert('Por favor, preencha todos os campos do contato')
+    }
   }
 
-
   return (
-    <Container maxWidth="lg" className={classes.container}>
-      <Grid container spacing={3}>
-        <Grid item sm={8}>
+    <Container component="main" maxWidth="lg">
+      <CssBaseline/>
+       <Box
+          sx={{
+            marginTop: 8,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+      <Grid container spacing={2}>
+        <Grid item xs={12} sm={6} >
           <Paper className={classes.paper}>
             <h2>Cadastro de Contatos</h2>
-            <Grid container spacing={1}>
-              <Grid item xs={8}>
+            <Grid container spacing={1} alignItems="center" justifyContent="center">
+              <Grid item xs={8} >
                 <TextField
+                  align = "center"
                   required
                   fullWidth
                   id="email"
@@ -87,7 +118,7 @@ export default function SignUp() {
                   onChange={e => setEmail(e.target.value)}
                 />
               </Grid>
-              <Grid container spacing={2}>
+              <Grid container spacing={2} justifyContent="center">
                 <Grid item xs={8} sm={4}>
                   <TextField
                     autoComplete="dob"
@@ -135,16 +166,23 @@ export default function SignUp() {
                 fullWidth
                 variant="contained"
                 onClick={handleSubmit}
+                href={"/"}
                 sx={{ mt: 3, mb: 2 }}
               >
-                CREATE
+                UPDATE
               </Button>
               </Grid>
 
             </Grid>
       </Paper>
+      <Box mt={5}>
+        <Link color="primary" href="/" sx={{ mt: 3 }}>
+          Go Back
+        </Link>
+      </Box>
     </Grid>
   </Grid >
+  </Box>
   </Container >
       );
 }

@@ -1,10 +1,10 @@
 import './App.css';
-import FormSignUp from './FormSignup'
+import Pages from './routes'
 
 function App() {
   return (
     <div className="App">
-      <FormSignUp />
+      <Pages />
     </div>
   );
 }

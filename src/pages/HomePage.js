@@ -30,6 +30,14 @@ import api from '../services/api'
 
     }
 
+    function handleDate(date) {
+      let timestamp = new Date(date).getTime();
+      let Day = new Date(timestamp).getDate();
+      let Month = new Date(timestamp).getMonth() +1;
+      let Year = new Date(timestamp).getFullYear();
+      return Day+"-"+Month+"-"+Year
+    }
+
     return (
       <React.Fragment>
         <h1>Contacts</h1>
@@ -47,7 +55,7 @@ import api from '../services/api'
             {contacts.map((row) => (
                 <TableRow key={row._id}>
                 <TableCell>{row.email}</TableCell>
-                <TableCell>{row.dob}</TableCell>
+                <TableCell>{handleDate(row.dob)}</TableCell>
                 <TableCell>{row.phone}</TableCell>
                 <TableCell>{row.weight}</TableCell>
                 <TableCell align="right">

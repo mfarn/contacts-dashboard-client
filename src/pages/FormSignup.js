@@ -87,7 +87,7 @@ export default function SignUp() {
       <Grid container spacing={2}>
         <Grid item xs={12} sm={6} >
           <Paper className={classes.paper}>
-            <h2>Cadastro de Contatos</h2>
+            <h2>Registration</h2>
             <Grid container spacing={1} alignItems="center" justifyContent="center">
               <Grid item xs={8} >
                 <TextField
